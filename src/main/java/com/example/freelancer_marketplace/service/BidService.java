@@ -54,6 +54,7 @@ public class BidService {
         bidDTO.setAmount(bid.getAmount());
         bidDTO.setProposal(bid.getProposal());
         // Set other fields as needed
+        
         return bidDTO;
     }
 }
