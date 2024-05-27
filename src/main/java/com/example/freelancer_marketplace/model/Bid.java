@@ -2,6 +2,7 @@ package com.example.freelancer_marketplace.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 @Data
 @Entity
 public class Bid {

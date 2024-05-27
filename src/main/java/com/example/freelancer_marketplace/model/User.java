@@ -1,31 +1,33 @@
 package com.example.freelancer_marketplace.model;
 
+import lombok.Data;
 
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-import java.util.HashSet;
-import java.util.Set;
 @Data
 @Entity
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "Username is mandatory")
     private String username;
+
+    @NotBlank(message = "Password is mandatory")
     private String password;
+
+    @NotBlank(message = "Role is mandatory")
     private String role; // "CLIENT" or "FREELANCER"
 
-    // Getters and Setters
-    // Other fields and methods
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
+    private String email; // Add email field
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Project> projects = new HashSet<>();
 }
