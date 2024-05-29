@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8089/api/users/signup', { username, password, role });
+      const response = await axios.post('http://localhost:8089/api/users/signup', { username, email, password, role });
+      setSuccessMessage('Signup successful! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000); // Redirect after 3 seconds
       console.log('Signup successful:', response.data);
-      // Handle successful signup, e.g., redirect to login page
     } catch (error) {
       console.error('Signup failed:', error);
-      // Handle signup failure, e.g., display error message to user
+      setSuccessMessage('Signup failed. Please try again.');
     }
   };
 
@@ -24,6 +31,7 @@ const Signup = () => {
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
+        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
         <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
         <select value={role} onChange={e => setRole(e.target.value)}>
           <option value="">Select Role</option>
@@ -32,6 +40,7 @@ const Signup = () => {
         </select>
         <button type="submit">Sign Up</button>
       </form>
+      {successMessage && <p className="success-message">{successMessage}</p>}
     </div>
   );
 };
