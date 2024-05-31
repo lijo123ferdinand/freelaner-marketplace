@@ -18,6 +18,10 @@ public class ProjectController {
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
+    @GetMapping("/user/{userId}")
+    public List<Project> getProjectsByUserId(@PathVariable Long userId) {
+        return projectRepository.findByUserId(userId);
+    }
 
     @GetMapping("/status/{status}")
     public List<Project> getProjectsByStatus(@PathVariable String status) {
