@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';  // Make sure to install jwt-decode
+import AuthContext from './AuthContext';
 import './Auth.css';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,10 +18,11 @@ const Login = () => {
       const response = await axios.post('http://localhost:8089/api/users/login', { email, password });
       const token = response.data;
 
-      // Decode the JWT token to get user information
-      const decodedToken = jwtDecode(token);
+      // Login and set the token
+      login(token);
 
       // Redirect based on user role
+      const decodedToken = jwtDecode(token);
       if (decodedToken.role === 'CLIENT') {
         navigate('/client-dashboard');
       } else if (decodedToken.role === 'FREELANCER') {
@@ -39,7 +42,7 @@ const Login = () => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="email" // Use type="email" for email input
+          type="email"
           placeholder="Email"
           value={email}
           onChange={e => setEmail(e.target.value)}

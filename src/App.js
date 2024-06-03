@@ -5,9 +5,12 @@ import Signup from './components/Signup';
 import FreelancerDashboard from './components/FreelancerDashboard';
 import ProjectList from './components/ProjectList';
 import ClientDashboard from './components/ClientDashboard';
+import { AuthProvider } from './components/AuthContext';
 
 const App = () => {
   return (
+    <AuthProvider>
+
     <Router>
       <div>
         <h1>Freelancer Marketplace</h1>
@@ -22,6 +25,8 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
+
   );
 };
 

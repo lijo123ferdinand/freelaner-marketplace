@@ -1,44 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-
+import AuthContext from './AuthContext';
 
 function ClientDashboard() {
-    const [userId, setUserId] = useState(null);
+    const { auth } = useContext(AuthContext); // Get auth context
     const [projects, setProjects] = useState([]);
     const [newProject, setNewProject] = useState({
         title: '',
         description: '',
         status: 'OPEN',
         user: {
-            id: null
+            id: auth?.user?.userId // Use user ID from auth context
         }
     });
 
     useEffect(() => {
-        // Function to fetch user details and get the user ID
-        const fetchUserDetails = async () => {
+        // Function to fetch user projects
+        const fetchProjects = async () => {
             try {
-                // Fetch user details from the API
-                const response = await axios.get('http://localhost:8089/api/users');
-                // Extract the user ID from the response data
-                const userIdFromResponse = response.data.id;
-                // Set the user ID state
-                setUserId(userIdFromResponse);
-                // Set the user ID in the newProject state
-                setNewProject(prevState => ({
-                    ...prevState,
-                    user: {
-                        id: userIdFromResponse
+                // Fetch projects for the logged-in user
+                const response = await axios.get(`http://localhost:8089/api/projects/user/${auth.user.userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${auth.token}`
                     }
-                }));
+                });
+                // Set projects state
+                setProjects(response.data);
             } catch (error) {
-                console.error('Error fetching user details:', error);
+                console.error('Error fetching projects:', error);
             }
         };
 
-        // Call the fetchUserDetails function when the component mounts
-        fetchUserDetails();
-    }, []); // Empty dependency array to run the effect only once when the component mounts
+        // Call the fetchProjects function when the component mounts
+        if (auth?.user?.userId) {
+            fetchProjects();
+        }
+    }, [auth]); // Dependency on auth to refetch when auth changes
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -52,9 +49,17 @@ function ClientDashboard() {
         e.preventDefault();
         try {
             // Post new project data to the API
-            await axios.post('http://localhost:8089/api/projects', newProject);
+            await axios.post('http://localhost:8089/api/projects', newProject, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`
+                }
+            });
             // Fetch updated project list
-            const response = await axios.get('http://localhost:8089/api/projects');
+            const response = await axios.get(`http://localhost:8089/api/projects/user/${auth.user.userId}`, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`
+                }
+            });
             setProjects(response.data);
             // Clear form fields
             setNewProject({
@@ -62,7 +67,7 @@ function ClientDashboard() {
                 description: '',
                 status: 'OPEN',
                 user: {
-                    id: userId
+                    id: auth.user.userId
                 }
             });
         } catch (error) {
