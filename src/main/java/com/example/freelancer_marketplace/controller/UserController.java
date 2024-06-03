@@ -68,12 +68,12 @@ public class UserController {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (PasswordHashing.verifyPassword(loginRequest.getPassword(), user.getPassword())) {
-                String userType = user.getRole(); // Assuming role is stored in the User entity
-                String token = jwtTokenProvider.createToken(user.getEmail(), userType);
+                String token = jwtTokenProvider.createToken(user);
                 return ResponseEntity.ok(token);
             }
         }
         return ResponseEntity.status(401).body("Invalid email or password");
     }
+    
     
 }

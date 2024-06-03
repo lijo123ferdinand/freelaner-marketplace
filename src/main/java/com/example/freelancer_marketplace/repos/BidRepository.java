@@ -7,4 +7,4 @@ import java.util.List;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
     List<Bid> findByProjectId(Long projectId);
-}
+    List<Bid> findByUserId(Long userId);}
