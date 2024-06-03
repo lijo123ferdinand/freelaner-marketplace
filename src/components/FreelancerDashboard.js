@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import ProjectList from './ProjectList'; // Import the ProjectList component
 
 function FreelancerDashboard() {
@@ -24,11 +24,17 @@ function FreelancerDashboard() {
     console.log('Email state:', email); // Log the email state
 
     return (
-        <div>
-            <h1>Freelancer Dashboard</h1>
-            <p>Email: {email}</p>
-            {/* Render the ProjectList component */}
-            <ProjectList />
+        <div className="container mt-5">
+            <div className="card">
+                <div className="card-header">
+                    <h1>Freelancer Dashboard</h1>
+                </div>
+                <div className="card-body">
+                    <p className="card-text"><strong>Email:</strong> {email}</p>
+                    {/* Render the ProjectList component */}
+                    <ProjectList />
+                </div>
+            </div>
         </div>
     );
 }

@@ -5,6 +5,8 @@ import AuthContext from './AuthContext';
 function ClientDashboard() {
     const { auth } = useContext(AuthContext); // Get auth context
     const [projects, setProjects] = useState([]);
+    const [bids, setBids] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [newProject, setNewProject] = useState({
         title: '',
         description: '',
@@ -75,6 +77,44 @@ function ClientDashboard() {
         }
     };
 
+    const handleShowBids = async (projectId) => {
+        try {
+            const response = await axios.get(`http://localhost:8089/api/bids/project/${projectId}`, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`
+                }
+            });
+            setBids(response.data);
+            setSelectedProjectId(projectId);
+        } catch (error) {
+            console.error('Error fetching bids:', error);
+        }
+    };
+
+    const handleAcceptBid = async (projectId) => {
+        try {
+            // Update the project status to "IN_PROGRESS"
+            await axios.put(`http://localhost:8089/api/projects/${projectId}/status`, {
+                status: 'IN_PROGRESS'
+            }, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`
+                }
+            });
+            // Fetch updated project list
+            const response = await axios.get(`http://localhost:8089/api/projects/user/${auth.user.userId}`, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`
+                }
+            });
+            setProjects(response.data);
+            setSelectedProjectId(null); // Close the bids list
+            setBids([]); // Clear the bids list
+        } catch (error) {
+            console.error('Error accepting bid:', error);
+        }
+    };
+
     return (
         <div>
             <h2>Client Dashboard</h2>
@@ -97,6 +137,21 @@ function ClientDashboard() {
                 {projects.map(project => (
                     <li key={project.id}>
                         {project.title} - Status: {project.status}
+                        <button onClick={() => handleShowBids(project.id)}>Show Bids</button>
+                        {selectedProjectId === project.id && (
+                            <ul>
+                                {bids.length > 0 ? (
+                                    bids.map(bid => (
+                                        <li key={bid.id}>
+                                            {bid.amount} - {bid.proposal}
+                                            <button onClick={() => handleAcceptBid(project.id)}>Accept Bid</button>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li>No bids available</li>
+                                )}
+                            </ul>
+                        )}
                     </li>
                 ))}
             </ul>

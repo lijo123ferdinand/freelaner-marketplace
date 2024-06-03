@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import CreateBid from './CreateBid'; // Import the CreateBid component
+import './ProjectList.css'; // Import CSS for styling
 
 function ProjectList() {
     const [projects, setProjects] = useState([]);
     const [statusFilter, setStatusFilter] = useState('');
     const [filteredProjects, setFilteredProjects] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
+    const [isCreateBidOpen, setIsCreateBidOpen] = useState(false);
 
     useEffect(() => {
         // Function to fetch all projects
@@ -46,6 +50,18 @@ function ProjectList() {
         setStatusFilter(e.target.value);
     };
 
+    // Handle click event for creating a bid
+    const handleBidButtonClick = (projectId) => {
+        setSelectedProjectId(projectId);
+        setIsCreateBidOpen(true); // Open the bid creation modal
+    };
+
+    // Close the bid creation modal
+    const handleCloseBidModal = () => {
+        setIsCreateBidOpen(false);
+        setSelectedProjectId(null);
+    };
+
     return (
         <div>
             <h2>All Projects</h2>
@@ -62,10 +78,21 @@ function ProjectList() {
                         <h3>{project.title}</h3>
                         <p>Description: {project.description}</p>
                         <p>Status: {project.status}</p>
+                        {/* Button to create a bid */}
+                        <button onClick={() => handleBidButtonClick(project.id)}>Create Bid</button>
                         {/* If you want to display additional fields, add them here */}
                     </li>
                 ))}
             </ul>
+            {/* Render the CreateBid component as a modal */}
+            {isCreateBidOpen && (
+                <div className="bid-modal">
+                    <div className="modal-content">
+                        <button className="close-button" onClick={handleCloseBidModal}>Close</button>
+                        <CreateBid projectId={selectedProjectId} onClose={handleCloseBidModal} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

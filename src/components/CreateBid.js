@@ -3,7 +3,7 @@ import axios from 'axios';
 import AuthContext from './AuthContext'; // Ensure you have an AuthContext to provide JWT token
 import './BidForm.css'; // Optional: Create and import a CSS file for styling
 
-const CreateBid = ({ projectId }) => {
+const CreateBid = ({ projectId, onClose }) => {
     const { auth } = useContext(AuthContext); // Get auth context for user information and token
     const [amount, setAmount] = useState('');
     const [proposal, setProposal] = useState('');
@@ -33,6 +33,7 @@ const CreateBid = ({ projectId }) => {
             setSuccess('Bid created successfully!');
             setAmount('');
             setProposal('');
+            onClose(); // Close the form after successful submission
         } catch (error) {
             console.error('Error creating bid:', error);
             setError('Error creating bid. Please try again.');
@@ -60,6 +61,7 @@ const CreateBid = ({ projectId }) => {
                     required
                 />
                 <button type="submit">Submit Bid</button>
+                <button type="button" onClick={onClose}>Cancel</button>
             </form>
         </div>
     );
