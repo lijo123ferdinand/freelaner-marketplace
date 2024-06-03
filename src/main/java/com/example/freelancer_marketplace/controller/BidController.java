@@ -1,7 +1,10 @@
 package com.example.freelancer_marketplace.controller;
 
 import com.example.freelancer_marketplace.model.Bid;
+import com.example.freelancer_marketplace.model.Project;
 import com.example.freelancer_marketplace.service.BidService;
+import com.example.freelancer_marketplace.service.ProjectService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,9 @@ public class BidController {
 
     @Autowired
     private BidService bidService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping
     public List<Bid> getAllBids() {
@@ -54,6 +60,16 @@ public class BidController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Project> updateProjectStatus(@PathVariable Long id, @RequestBody String status) {
+        try {
+            Project updatedProject = projectService.updateProjectStatus(id, status);
+            return ResponseEntity.ok(updatedProject);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBid(@PathVariable Long id) {
