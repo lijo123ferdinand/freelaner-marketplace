@@ -60,7 +60,7 @@ public class BidController {
             return ResponseEntity.notFound().build();
         }
     }
-    @PutMapping("/{id}/status")
+    @PutMapping("/{id}/update-status")
     public ResponseEntity<Project> updateProjectStatus(@PathVariable Long id, @RequestBody String status) {
         try {
             Project updatedProject = projectService.updateProjectStatus(id, status);
@@ -69,6 +69,7 @@ public class BidController {
             return ResponseEntity.notFound().build();
         }
     }
+    
 
 
     @DeleteMapping("/{id}")
