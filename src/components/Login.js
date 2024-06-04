@@ -1,17 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from './AuthContext';
 import './Auth.css'; // Importing global styles
 import './Login.css'; // Importing local styles
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Import jwtDecode from 'jwt-decode'
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,11 +17,13 @@ const Login = () => {
       const response = await axios.post('http://localhost:8089/api/users/login', { email, password });
       const token = response.data;
 
-      // Login and set the token
-      login(token);
+      // Store the token in local storage
+      localStorage.setItem('token', token);
 
       // Redirect based on user role
       const decodedToken = jwtDecode(token);
+      console.log('Decoded Token:', decodedToken); // Log the decoded token
+
       if (decodedToken.role === 'CLIENT') {
         navigate('/client-dashboard');
       } else if (decodedToken.role === 'FREELANCER') {

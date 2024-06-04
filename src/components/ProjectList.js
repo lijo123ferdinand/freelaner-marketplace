@@ -63,18 +63,20 @@ function ProjectList() {
     };
 
     return (
-        <div>
+        <div className="project-list">
             <h2>All Projects</h2>
-            <label htmlFor="statusFilter">Filter by Status:</label>
-            <select id="statusFilter" value={statusFilter} onChange={handleStatusChange}>
-                <option value="">All</option>
-                <option value="OPEN">Open</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="COMPLETED">Completed</option>
-            </select>
-            <ul>
+            <div className="filter-container">
+                <label htmlFor="statusFilter">Filter by Status:</label>
+                <select id="statusFilter" value={statusFilter} onChange={handleStatusChange}>
+                    <option value="">All</option>
+                    <option value="OPEN">Open</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                </select>
+            </div>
+            <ul className="project-items">
                 {filteredProjects.map(project => (
-                    <li key={project.id}>
+                    <li key={project.id} className="project-item">
                         <h3>{project.title}</h3>
                         <p>Description: {project.description}</p>
                         <p>Status: {project.status}</p>

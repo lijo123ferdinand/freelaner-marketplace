@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AuthContext from './AuthContext';
-
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 function ClientDashboard() {
-    const { auth } = useContext(AuthContext); // Get auth context
     const [projects, setProjects] = useState([]);
     const [bids, setBids] = useState([]);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
@@ -12,32 +11,38 @@ function ClientDashboard() {
         description: '',
         status: 'OPEN',
         user: {
-            id: auth?.user?.userId // Use user ID from auth context
+            id: null
         }
     });
 
+    const navigate = useNavigate(); 
+
     useEffect(() => {
-        // Function to fetch user projects
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        const decodedToken = jwtDecode(token);
+        setNewProject(prevState => ({
+            ...prevState,
+            user: {
+                id: decodedToken.userId
+            }
+        }));
+
         const fetchProjects = async () => {
             try {
-                // Fetch projects for the logged-in user
-                const response = await axios.get(`http://localhost:8089/api/projects/user/${auth.user.userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${auth.token}`
-                    }
-                });
-                // Set projects state
+                const response = await axios.get(`http://localhost:8089/api/projects/user/${decodedToken.userId}`);
                 setProjects(response.data);
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
         };
 
-        // Call the fetchProjects function when the component mounts
-        if (auth?.user?.userId) {
-            fetchProjects();
-        }
-    }, [auth]); // Dependency on auth to refetch when auth changes
+        fetchProjects();
+    }, [navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -50,26 +55,16 @@ function ClientDashboard() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Post new project data to the API
-            await axios.post('http://localhost:8089/api/projects', newProject, {
-                headers: {
-                    Authorization: `Bearer ${auth.token}`
-                }
-            });
-            // Fetch updated project list
-            const response = await axios.get(`http://localhost:8089/api/projects/user/${auth.user.userId}`, {
-                headers: {
-                    Authorization: `Bearer ${auth.token}`
-                }
-            });
+            const token = localStorage.getItem('token');
+            await axios.post('http://localhost:8089/api/projects', newProject);
+            const response = await axios.get(`http://localhost:8089/api/projects/user/${newProject.user.id}`);
             setProjects(response.data);
-            // Clear form fields
             setNewProject({
                 title: '',
                 description: '',
                 status: 'OPEN',
                 user: {
-                    id: auth.user.userId
+                    id: newProject.user.id
                 }
             });
         } catch (error) {
@@ -79,11 +74,7 @@ function ClientDashboard() {
 
     const handleShowBids = async (projectId) => {
         try {
-            const response = await axios.get(`http://localhost:8089/api/bids/project/${projectId}`, {
-                headers: {
-                    Authorization: `Bearer ${auth.token}`
-                }
-            });
+            const response = await axios.get(`http://localhost:8089/api/bids/project/${projectId}`);
             setBids(response.data);
             setSelectedProjectId(projectId);
         } catch (error) {
@@ -93,23 +84,13 @@ function ClientDashboard() {
 
     const handleAcceptBid = async (projectId) => {
         try {
-            // Update the project status to "IN_PROGRESS"
-            await axios.put(`http://localhost:8089/api/projects/${projectId}/status`, {
+            await axios.put(`http://localhost:8089/api/bids/${projectId}/update-status`, {
                 status: 'IN_PROGRESS'
-            }, {
-                headers: {
-                    Authorization: `Bearer ${auth.token}`
-                }
             });
-            // Fetch updated project list
-            const response = await axios.get(`http://localhost:8089/api/projects/user/${auth.user.userId}`, {
-                headers: {
-                    Authorization: `Bearer ${auth.token}`
-                }
-            });
+            const response = await axios.get(`http://localhost:8089/api/projects/user/${newProject.user.id}`);
             setProjects(response.data);
-            setSelectedProjectId(null); // Close the bids list
-            setBids([]); // Clear the bids list
+            setSelectedProjectId(null);
+            setBids([]);
         } catch (error) {
             console.error('Error accepting bid:', error);
         }

@@ -1,14 +1,34 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AuthContext from './AuthContext'; // Ensure you have an AuthContext to provide JWT token
+import { jwtDecode } from 'jwt-decode';
 import './BidForm.css'; // Optional: Create and import a CSS file for styling
 
 const CreateBid = ({ projectId, onClose }) => {
-    const { auth } = useContext(AuthContext); // Get auth context for user information and token
     const [amount, setAmount] = useState('');
     const [proposal, setProposal] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [userId, setUserId] = useState(null); // Initialize userId state
+
+    useEffect(() => {
+        // Decode token and set userId once when component mounts
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                if (decodedToken && decodedToken.userId) {
+                    setUserId(decodedToken.userId);
+                } else {
+                    throw new Error('Invalid userId');
+                }
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                setError('Error decoding token. Please try again.');
+            }
+        } else {
+            setError('Token not found in localStorage');
+        }
+    }, []); // Empty dependency array ensures this effect runs only once on mount
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,15 +40,11 @@ const CreateBid = ({ projectId, onClose }) => {
                     id: projectId
                 },
                 user: {
-                    id: auth.user.userId
+                    id: userId // Use userId obtained from token decoding
                 }
             };
 
-            const response = await axios.post('http://localhost:8089/api/bids', bidData, {
-                headers: {
-                    Authorization: `Bearer ${auth.token}`
-                }
-            });
+            const response = await axios.post('http://localhost:8089/api/bids', bidData);
 
             setSuccess('Bid created successfully!');
             setAmount('');

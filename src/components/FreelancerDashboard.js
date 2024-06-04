@@ -1,36 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import ProjectList from './ProjectList'; // Import the ProjectList component
+import './FreelancerDashboard.css'; // Import the CSS file
 
 function FreelancerDashboard() {
     const [email, setEmail] = useState('');
 
     useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
-
+        const token = localStorage.getItem('token');
         if (token) {
-            const decodedToken = jwtDecode(token);
-            console.log('Decoded token:', decodedToken);
-
-            const userEmail = decodedToken.sub; // Assuming 'sub' contains the email
-            console.log('User email:', userEmail);
-
-            setEmail(userEmail);
-        } else {
-            console.error('No JWT token found');
+            try {
+                const decodedToken = jwtDecode(token);
+                const userEmail = decodedToken.email; // Assuming 'email' is the field containing the email
+                setEmail(userEmail);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                // Handle error decoding token
+            }
         }
     }, []);
 
-    console.log('Email state:', email); // Log the email state
-
     return (
-        <div className="container mt-5">
-            <div className="card">
+        <div className="dashboard-container">
+            <div className="dashboard-card">
                 <div className="card-header">
                     <h1>Freelancer Dashboard</h1>
                 </div>
                 <div className="card-body">
-                    <p className="card-text"><strong>Email:</strong> {email}</p>
+                    <p className="user-info"><strong>Email:</strong> {email}</p>
                     {/* Render the ProjectList component */}
                     <ProjectList />
                 </div>
