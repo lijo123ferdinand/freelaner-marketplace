@@ -1,0 +1,17 @@
+.login-page {
+    background-image: url('flat-lay-workstation-with-cup-tea-copy-space.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .auth-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Optional: Adds a semi-transparent white background to the form */
+    padding: 30px;
+    border-radius: 30px;
+    text-align: center;
+  }
+  

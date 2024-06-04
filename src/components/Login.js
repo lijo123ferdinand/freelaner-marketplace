@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from './AuthContext';
-import './Auth.css';
+import './Auth.css'; // Importing global styles
+import './Login.css'; // Importing local styles
 import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
@@ -38,25 +39,27 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
-      {error && <p className="error">{error}</p>}
-      <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+    <div className="login-page">
+      <div className="auth-container">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          <button type="submit">Login</button>
+        </form>
+        {error && <p className="error">{error}</p>}
+        <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+      </div>
     </div>
   );
 };
