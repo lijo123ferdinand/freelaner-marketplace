@@ -9,6 +9,7 @@ import com.example.freelancer_marketplace.service.ProjectService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,6 +80,22 @@ public class BidController {
             return ResponseEntity.ok(updatedProject);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/accepted-projects/user/{userId}")
+    public ResponseEntity<List<Project>> getAcceptedProjectsByUserId(@PathVariable Long userId) {
+        try {
+            // Find bids with status "ACCEPTED" for the given user ID
+            List<Bid> acceptedBids = bidRepository.findByUserIdAndStatus(userId, "ACCEPTED");
+
+            // Extract the associated projects from the accepted bids
+            List<Project> acceptedProjects = acceptedBids.stream()
+                    .map(Bid::getProject)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(acceptedProjects);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
     @PutMapping("/{id}/accept")
