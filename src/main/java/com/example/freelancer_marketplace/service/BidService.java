@@ -37,4 +37,8 @@ public class BidService {
     public void deleteBid(Long id) {
         bidRepository.deleteById(id);
     }
+    public void deleteBidsByProject(Long projectId) {
+        List<Bid> projectBids = bidRepository.findByProjectId(projectId);
+        bidRepository.deleteAll(projectBids);
+    }
 }

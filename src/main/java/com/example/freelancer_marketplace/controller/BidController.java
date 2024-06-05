@@ -69,6 +69,32 @@ public class BidController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PutMapping("/{id}/accept")
+    public ResponseEntity<Bid> acceptBid(@PathVariable Long id) {
+        try {
+            Optional<Bid> existingBid = bidService.getBidById(id);
+            if (existingBid.isPresent()) {
+                Bid bid = existingBid.get();
+                // Set bid status to "ACCEPTED"
+                bid.setStatus("ACCEPTED");
+                Bid updatedBid = bidService.saveBid(bid);
+                
+                // Delete all other bids related to the same project
+                List<Bid> projectBids = bidService.getBidsByProject(bid.getProject().getId());
+                for (Bid otherBid : projectBids) {
+                    if (!otherBid.getId().equals(id)) {
+                        bidService.deleteBid(otherBid.getId());
+                    }
+                }
+    
+                return ResponseEntity.ok(updatedBid);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
     
 
 

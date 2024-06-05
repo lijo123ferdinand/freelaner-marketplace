@@ -2,6 +2,7 @@ package com.example.freelancer_marketplace.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 @Data
 @Entity
 public class Bid {
@@ -11,6 +12,9 @@ public class Bid {
     private Long id;
     private Double amount;
     private String proposal;
+    
+    // Add bid status field
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
