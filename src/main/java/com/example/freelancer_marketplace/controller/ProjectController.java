@@ -3,6 +3,7 @@ package com.example.freelancer_marketplace.controller;
 import com.example.freelancer_marketplace.model.Project;
 import com.example.freelancer_marketplace.repos.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,4 +33,17 @@ public class ProjectController {
     public Project createProject(@RequestBody Project project) {
         return projectRepository.save(project);
     }
+    @DeleteMapping("/{projectId}")
+public ResponseEntity<?> deleteProject(@PathVariable Long projectId) {
+    // Check if the project exists
+    if (!projectRepository.existsById(projectId)) {
+        return ResponseEntity.notFound().build();
+    }
+
+    // Delete the project
+    projectRepository.deleteById(projectId);
+
+    return ResponseEntity.ok().build();
+}
+
 }
