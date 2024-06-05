@@ -1,50 +1,43 @@
-.dashboard-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .dashboard-card {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 400px;
-  }
-  
-  .card-header {
-    text-align: center;
-  }
-  
-  .card-header h1 {
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  .card-body {
-    margin-top: 20px;
-  }
-  
-  .user-info {
-    margin-bottom: 10px;
-  }
-  
-  .project-list {
-    margin-top: 20px;
-  }
-  
-  /* Style the project list items */
-  .project-item {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .project-item:hover {
-    background-color: #f0f0f0;
-    transition: background-color 0.3s ease;
-  }
-  
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard-sidebar {
+  width: 250px;
+  background-color: #73a7db;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  border-radius: 0 30px 30px 0;
+  text-align: center;
+}
+
+.dashboard-sidebar h1 {
+  margin-bottom: 20px;
+}
+
+.dashboard-sidebar .user-info {
+  margin-bottom: 20px;
+}
+
+.dashboard-sidebar .logout-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+.dashboard-sidebar .logout-btn:hover
+{
+  background-color: #ee041b;
+}
+
+.dashboard-content {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}

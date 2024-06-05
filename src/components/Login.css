@@ -1,17 +1,74 @@
 .login-page {
-    background-image: url('flat-lay-workstation-with-cup-tea-copy-space.jpg');
-    background-size: cover;
-    background-position: center;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .auth-container {
-    background-color: rgba(255, 255, 255, 0.9); /* Optional: Adds a semi-transparent white background to the form */
-    padding: 30px;
-    border-radius: 30px;
-    text-align: center;
-  }
-  
+  background-image: url('flat-lay-workstation-with-cup-tea-copy-space.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 30px;
+  text-align: center;
+  width: 400px; /* Adjust the width as per your requirement */
+  height: 500px; /* Adjust the height as per your requirement */
+  margin: auto; /* Center the container horizontally and vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.signup-page {
+  background-image: url('flat-lay-workstation-with-cup-tea-copy-space.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-container {
+  background-color: rgba(168, 151, 151, 0.9);
+  padding: 30px; /* Increase the padding to create space for the form */
+  border-radius: 30px;
+  text-align: center;
+  width: 50%; /* Adjust the width as per your requirement */
+  height: auto; /* Adjust the height as per your requirement */
+  margin: 0 auto; /* Center the container horizontally */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-container form {
+  width: 80%; /* Ensure the form takes up the full width of the container */
+}
+
+.auth-container input,
+.auth-container select,
+.auth-container button {
+  width: 100%; /* Make the input, select, and button elements full-width */
+  margin-bottom: 15px; /* Add some space between each form element */
+  padding: 10px; /* Add padding to the form elements */
+  font-size: 16px; /* Adjust font size */
+}
+
+.auth-container button {
+  background-color: #061ef5; /* Green background */
+  color: white; /* White text */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+  padding: 15px 20px; /* Padding */
+  font-size: 18px; /* Font size */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.auth-container button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}

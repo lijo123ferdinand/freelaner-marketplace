@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import './ClientDashboard.css'; // Import the CSS file
+
 function ClientDashboard() {
     const [projects, setProjects] = useState([]);
     const [bids, setBids] = useState([]);
@@ -14,8 +16,9 @@ function ClientDashboard() {
             id: null
         }
     });
+    const [showCreateProjectForm, setShowCreateProjectForm] = useState(false); // New state
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -67,6 +70,8 @@ function ClientDashboard() {
                     id: newProject.user.id
                 }
             });
+            // Hide the form after submission
+            setShowCreateProjectForm(false);
         } catch (error) {
             console.error('Error creating project:', error);
         }
@@ -82,62 +87,103 @@ function ClientDashboard() {
         }
     };
 
-    const handleAcceptBid = async (projectId) => {
+    const handleAcceptBid = async (projectId, bidId) => {
         try {
-            await axios.put(`http://localhost:8089/api/bids/${projectId}/update-status`, {
-                status: 'IN_PROGRESS'
+            await axios.put(`http://localhost:8089/api/bids/${projectId}/update-status`, 'IN_PROGRESS', {
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
             });
             const response = await axios.get(`http://localhost:8089/api/projects/user/${newProject.user.id}`);
             setProjects(response.data);
             setSelectedProjectId(null);
             setBids([]);
+    
+            // Call the endpoint to accept the bid
+            await axios.put(`http://localhost:8089/api/bids/${bidId}/accept`);
         } catch (error) {
             console.error('Error accepting bid:', error);
         }
     };
 
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login');
+    };
+
     return (
-        <div>
-            <h2>Client Dashboard</h2>
-            <h3>Create New Project</h3>
-            <form onSubmit={handleSubmit}>
-                <label>Title:</label>
-                <input type="text" name="title" value={newProject.title} onChange={handleChange} required />
-                <label>Description:</label>
-                <textarea name="description" value={newProject.description} onChange={handleChange} required />
-                <label>Status:</label>
-                <select name="status" value={newProject.status} onChange={handleChange}>
-                    <option value="OPEN">Open</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="COMPLETED">Completed</option>
-                </select>
-                <button type="submit">Create Project</button>
-            </form>
-            <h3>Projects</h3>
-            <ul>
-                {projects.map(project => (
-                    <li key={project.id}>
-                        {project.title} - Status: {project.status}
-                        <button onClick={() => handleShowBids(project.id)}>Show Bids</button>
-                        {selectedProjectId === project.id && (
-                            <ul>
-                                {bids.length > 0 ? (
-                                    bids.map(bid => (
-                                        <li key={bid.id}>
-                                            {bid.amount} - {bid.proposal}
-                                            <button onClick={() => handleAcceptBid(project.id)}>Accept Bid</button>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li>No bids available</li>
-                                )}
-                            </ul>
-                        )}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+        <div className="client-dashboard">
+            
+           <div className="sidebar">
+                <h2>Navigation</h2>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#bids">Bids</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                </ul>
+            
+        <h2>Client Dashboard</h2>
+        <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
+    </div>
+    <div className="main-content">
+        {/* Button to toggle the visibility of the create project form */}
+        <button onClick={() => setShowCreateProjectForm(!showCreateProjectForm)}>
+            {showCreateProjectForm ? "Hide Create Project Form" : "Show Create Project Form"}
+        </button>
+        {/* Create project form */}
+        {showCreateProjectForm && (
+            <div className="create-project-form">
+                <h3>Create New Project</h3>
+                <form onSubmit={handleSubmit}>
+                    <label>Title:</label>
+                    <input type="text" name="title" value={newProject.title} onChange={handleChange} required />
+                    <label>Description:</label>
+                    <textarea name="description" value={newProject.description} onChange={handleChange} required />
+                    <label>Status:</label>
+                    <select name="status" value={newProject.status} onChange={handleChange}>
+                        <option value="OPEN">Open</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                    <button type="submit">Create Project</button>
+                </form>
+            </div>
+        )}
+        <h3>Projects</h3>
+        <ul className="projects-list">
+            {projects.map(project => (
+                <li key={project.id} className="project-item">
+                    <div className="d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>{project.title}</strong> - Status: {project.status}
+                        </span>
+                        <button onClick={() => handleShowBids(project.id)} className="btn">Show Bids</button>
+                    </div>
+                    {selectedProjectId === project.id && (
+                        <ul className="bids-list">
+                            {bids.length > 0 ? (
+                                bids.map(bid => (
+                                    <li key={bid.id} className="bid-item">
+                                        {bid.amount} - {bid.proposal}
+                                        {/* Button to accept bid, displayed only if the project status is not "IN_PROGRESS" */}
+                                        {project.status !== 'IN_PROGRESS' && (
+                                            <button onClick={() => handleAcceptBid(project.id, bid.id)} className="btn btn-success ml-2">Accept Bid</button>
+                                        )}
+                                    </li>
+                                ))
+                            ) : (
+                                <li className="bid-item no-bids">No bids available</li>
+                            )}
+                        </ul>
+                    )}
+                </li>
+            ))}
+        </ul>
+    </div>
+</div>
+);
 }
 
 export default ClientDashboard;

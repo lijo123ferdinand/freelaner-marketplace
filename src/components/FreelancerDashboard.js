@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import ProjectList from './ProjectList'; // Import the ProjectList component
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import './FreelancerDashboard.css'; // Import the CSS file
 
 function FreelancerDashboard() {
     const [email, setEmail] = useState('');
+    const navigate = useNavigate(); // Initialize navigate
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -20,17 +22,21 @@ function FreelancerDashboard() {
         }
     }, []);
 
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login');
+    };
+
     return (
-        <div className="dashboard-container">
-            <div className="dashboard-card">
-                <div className="card-header">
-                    <h1>Freelancer Dashboard</h1>
-                </div>
-                <div className="card-body">
-                    <p className="user-info"><strong>Email:</strong> {email}</p>
-                    {/* Render the ProjectList component */}
-                    <ProjectList />
-                </div>
+        <div className="dashboard">
+            <div className="dashboard-sidebar">
+                <h1>Freelancer Dashboard</h1>
+                <p className="user-info"><strong>Email:</strong> {email}</p>
+                <button onClick={handleLogout} className="btn logout-btn">Logout</button>
+            </div>
+            <div className="dashboard-content">
+                {/* Render the ProjectList component */}
+                <ProjectList />
             </div>
         </div>
     );
