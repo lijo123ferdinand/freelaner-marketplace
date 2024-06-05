@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import ProjectList from './ProjectList'; // Import the ProjectList component
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { Link, useNavigate } from 'react-router-dom';
 import './FreelancerDashboard.css'; // Import the CSS file
 
 function FreelancerDashboard() {
@@ -34,7 +34,7 @@ function FreelancerDashboard() {
                 <p className="user-info"><strong>Email:</strong> {email}</p>
                
                     <ul>
-                    <li><a href="#home">Projects</a></li>
+                    <li><Link to="/FreelancerProject#projects">Projects</Link></li>
                     <li><a href="#projects">Settings</a></li>
                     <li><a href="#bids">Report</a></li>
                     <li><a href="#profile">Profile</a></li>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // Import jwtDecode
-import './ClientDashboard.css'; // Import the CSS file
+import {jwtDecode} from 'jwt-decode';
+import './ClientDashboard.css';
 
 function ClientDashboard() {
     const [projects, setProjects] = useState([]);
@@ -16,8 +16,8 @@ function ClientDashboard() {
             id: null
         }
     });
-    const [showCreateProjectForm, setShowCreateProjectForm] = useState(false); // New state
-    const [email, setEmail] = useState(''); // State to store the decoded email
+    const [showCreateProjectForm, setShowCreateProjectForm] = useState(false);
+    const [email, setEmail] = useState('');
 
     const navigate = useNavigate();
 
@@ -28,8 +28,8 @@ function ClientDashboard() {
             return;
         }
 
-        const decodedToken = jwtDecode(token); // Decode the token
-        setEmail(decodedToken.email); // Extract and set the email from the decoded token
+        const decodedToken = jwtDecode(token);
+        setEmail(decodedToken.email);
         setNewProject(prevState => ({
             ...prevState,
             user: {
@@ -60,7 +60,6 @@ function ClientDashboard() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const token = localStorage.getItem('token');
             await axios.post('http://localhost:8089/api/projects', newProject);
             const response = await axios.get(`http://localhost:8089/api/projects/user/${newProject.user.id}`);
             setProjects(response.data);
@@ -72,7 +71,6 @@ function ClientDashboard() {
                     id: newProject.user.id
                 }
             });
-            // Hide the form after submission
             setShowCreateProjectForm(false);
         } catch (error) {
             console.error('Error creating project:', error);
@@ -100,8 +98,6 @@ function ClientDashboard() {
             setProjects(response.data);
             setSelectedProjectId(null);
             setBids([]);
-
-            // Call the endpoint to accept the bid
             await axios.put(`http://localhost:8089/api/bids/${bidId}/accept`);
         } catch (error) {
             console.error('Error accepting bid:', error);
@@ -110,7 +106,7 @@ function ClientDashboard() {
 
     const handleRemoveProject = async (projectId) => {
         try {
-            await axios.delete(`http://localhost:8089/api/bids/${projectId}`);
+            await axios.delete(`http://localhost:8089/api/projects/${projectId}`);
             const updatedProjects = projects.filter(project => project.id !== projectId);
             setProjects(updatedProjects);
         } catch (error) {
@@ -125,12 +121,9 @@ function ClientDashboard() {
 
     return (
         <div className="client-dashboard">
-
             <div className="sidebar">
                 <h1>Client Dashboard</h1>
-
-                <p className="user-email"><strong> Client Email:</strong> {email} </p> {/* Display user email */}
-
+                <p className="user-email"><strong>Client Email:</strong> {email}</p>
                 <h2>Navigation</h2>
                 <ul>
                     <li><a href="#home">Home</a></li>
@@ -139,16 +132,13 @@ function ClientDashboard() {
                     <li><a href="#profile">Profile</a></li>
                     <li><a href="#settings">Settings</a></li>
                 </ul>
-
                 <h2>Client Dashboard</h2>
                 <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
             </div>
             <div className="main-content">
-                {/* Button to toggle the visibility of the create project form */}
                 <button onClick={() => setShowCreateProjectForm(!showCreateProjectForm)}>
                     {showCreateProjectForm ? "Hide Create Project Form" : "Show Create Project Form"}
                 </button>
-                {/* Create project form */}
                 {showCreateProjectForm && (
                     <div className="create-project-form">
                         <h3>Create New Project</h3>
@@ -176,21 +166,18 @@ function ClientDashboard() {
                                     <strong>{project.title}</strong> - Status: {project.status}
                                 </span>
                                 <div>
-    <button onClick={() => handleShowBids(project.id)} className="btn-show-bids">Show Bids</button>
-    <button onClick={() => handleRemoveProject(project.id)} className="btn-remove-project" style={{ marginLeft: '10px' }}>Remove Project</button>
-</div>
-
+                                    <button onClick={() => handleShowBids(project.id)} className="btn-show-bids">Show Bids</button>
+                                    <button onClick={() => handleRemoveProject(project.id)} className="btn-remove-project" style={{ marginLeft: '10px' }}>Remove Project</button>
+                                </div>
                             </div>
                             {selectedProjectId === project.id && (
                                 <ul className="bids-list">
                                     {bids.length > 0 ? (
                                         bids.map(bid => (
                                             <li key={bid.id} className="bid-item">
-                                                {bid.amount} - {bid.proposal}
-                                                {/* Button to accept bid, displayed only if the project status is not "IN_PROGRESS" */}
+                                                <span><strong>{bid.user.name}</strong> ({bid.user.email}) - {bid.amount} - {bid.proposal}</span>
                                                 {project.status !== 'IN_PROGRESS' && (
-                                                    <button onClick={() => handleAcceptBid(project.id
-                                                        , bid.id)} className="btn btn-success ml-2">Accept Bid</button>
+                                                    <button onClick={() => handleAcceptBid(project.id, bid.id)} className="btn btn-success ml-2">Accept Bid</button>
                                                 )}
                                             </li>
                                         ))
@@ -203,8 +190,8 @@ function ClientDashboard() {
                     ))}
                 </ul>
             </div>
-
         </div>
     );
 }
+
 export default ClientDashboard;

@@ -5,6 +5,8 @@ import Signup from './components/Signup';
 import FreelancerDashboard from './components/FreelancerDashboard';
 import ProjectList from './components/ProjectList';
 import ClientDashboard from './components/ClientDashboard';
+import FreelancerProject from './components/FreelancerProject';
+import FreelancerBids from './components/FreelancerBids';
 
 const App = () => {
   return (
@@ -21,6 +23,10 @@ const App = () => {
           <Route path="/freelancer" element={<FreelancerDashboard />} />
           <Route path="/projlist" element={<ProjectList />} />
           <Route path="/client-dashboard" element={<ClientDashboard />} />
+          <Route path="/FreelancerProject" element={<FreelancerProject />} />
+          <Route path="/FreelancerBids" element={<FreelancerBids />} />
+
+
 
 
         </Routes>

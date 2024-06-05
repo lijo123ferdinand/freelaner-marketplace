@@ -107,7 +107,7 @@
 }
 
 .projects-list .project-item {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(46, 103, 187, 0.9);
     margin-bottom: 15px;
     padding: 15px;
     border-radius: 10px;
@@ -142,15 +142,15 @@
 }
 
 .bids-list .bid-item {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(31, 75, 217, 0.9);
     margin-bottom: 5px;
-    padding: 10px;
+    padding: 40px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(1, 182, 253, 0.1);
 }
 
 .bid-item .btn-success {
-    background-color: #28a745;
+    background-color: #a72863;
     color: white;
     border: none;
     padding: 5px 10px;
