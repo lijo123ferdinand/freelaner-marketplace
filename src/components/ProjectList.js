@@ -6,6 +6,7 @@ import './ProjectList.css'; // Import CSS for styling
 function ProjectList() {
     const [projects, setProjects] = useState([]);
     const [statusFilter, setStatusFilter] = useState('');
+    const [sortingOption, setSortingOption] = useState('');
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [isCreateBidOpen, setIsCreateBidOpen] = useState(false);
@@ -25,29 +26,43 @@ function ProjectList() {
         fetchProjects();
     }, []); // Empty dependency array to run the effect only once when the component mounts
 
-    // Filter projects by status when the statusFilter state changes
+    // Filter and sort projects when statusFilter or sortingOption changes
     useEffect(() => {
-        if (statusFilter) {
-            const fetchFilteredProjects = async () => {
-                try {
-                    const response = await axios.get(`http://localhost:8089/api/projects/status/${statusFilter}`);
-                    setFilteredProjects(response.data);
-                } catch (error) {
-                    console.error('Error fetching filtered projects:', error);
-                }
-            };
+        let sortedProjects = [...projects];
 
-            // Call the fetchFilteredProjects function to get projects by status
-            fetchFilteredProjects();
-        } else {
-            // If no status filter is selected, display all projects
-            setFilteredProjects(projects);
+        // Apply status filter
+        if (statusFilter) {
+            sortedProjects = sortedProjects.filter(project => project.status === statusFilter);
         }
-    }, [statusFilter, projects]); // Re-run this effect when statusFilter or projects change
+
+        // Apply sorting option
+        if (sortingOption === 'title') {
+            sortedProjects.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (sortingOption === 'description') {
+            sortedProjects.sort((a, b) => a.description.localeCompare(b.description));
+        } else if (sortingOption === 'status') {
+            sortedProjects.sort((a, b) => {
+                // Define the sorting order based on project status
+                const statusOrder = {
+                    'OPEN': 1,
+                    'IN_PROGRESS': 2,
+                    'COMPLETED': 3
+                };
+                return statusOrder[a.status] - statusOrder[b.status];
+            });
+        } // Add more sorting options if needed
+
+        setFilteredProjects(sortedProjects);
+    }, [statusFilter, sortingOption, projects]); // Re-run this effect when statusFilter, sortingOption, or projects change
 
     // Handle change in the status filter dropdown
     const handleStatusChange = (e) => {
         setStatusFilter(e.target.value);
+    };
+
+    // Handle change in the sorting dropdown
+    const handleSortingChange = (e) => {
+        setSortingOption(e.target.value);
     };
 
     // Handle click event for creating a bid
@@ -73,19 +88,29 @@ function ProjectList() {
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="COMPLETED">Completed</option>
                 </select>
+                {/* Add sorting dropdown */}
+                <label htmlFor="sortingOption">Sort by:</label>
+                <select id="sortingOption" value={sortingOption} onChange={handleSortingChange}>
+                    <option value="">None</option>
+                    <option value="title">Title</option>
+                    <option value="description">Description</option>
+                    <option value="status">Status</option>
+                    {/* Add more sorting options if needed */}
+                </select>
             </div>
             <ul className="project-items">
                 {filteredProjects.map(project => (
-                    <li key={project.id} className="project-item">
-                        <h3>{project.title}</h3>
-                        <p>Description: {project.description}</p>
-                        <p>Status: {project.status}</p>
-                        {/* Button to create a bid, displayed only if the project status is not "IN_PROGRESS" */}
-                        {project.status !== 'IN_PROGRESS' && (
-                            <button onClick={() => handleBidButtonClick(project.id)}>Create Bid</button>
-                        )}
-                        {/* If you want to display additional fields, add them here */}
-                    </li>
+                   <li key={project.id} className="project-item">
+                   <h3>{project.title}</h3>
+                   <p>Description: {project.description}</p>
+                   <p>Status: {project.status}</p>
+                   {/* Button to create a bid, displayed only if the project status is not "IN_PROGRESS" */}
+                   {project.status !== 'IN_PROGRESS' && (
+                       <button onClick={() => handleBidButtonClick(project.id)} className="btn-create-bid">Create Bid</button>
+                   )}
+                   {/* If you want to display additional fields, add them here */}
+               </li>
+               
                 ))}
             </ul>
             {/* Render the CreateBid component as a modal */}
