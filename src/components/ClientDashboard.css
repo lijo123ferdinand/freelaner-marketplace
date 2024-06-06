@@ -6,7 +6,7 @@
 }
 
 /* Sidebar styling */
-.sidebar {
+.client-dashboard-sidebar {
     width: 250px;
     background-image: linear-gradient(to top, #c7dd76, #2e2002); /* Gradient background */
     color: white;
@@ -16,21 +16,21 @@
     box-shadow: 2px 0 5px rgba(240, 89, 89, 0.1);
 }
 
-.sidebar h2 {
+.client-dashboard-sidebar h2 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.sidebar ul {
+.client-dashboard-sidebar ul {
     list-style-type: none;
     padding: 0;
 }
 
-.sidebar li {
+.client-dashboard-sidebar li {
     margin-bottom: 10px;
 }
 
-.sidebar a {
+.client-dashboard-sidebar a {
     color: white;
     text-decoration: none;
     display: block;
@@ -39,7 +39,7 @@
     transition: background-color 0.3s ease;
 }
 
-.sidebar a:hover {
+.client-dashboard-sidebar a:hover {
     background-color: #495057;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .bids-list .bid-item {
-    background-color: rgba(31, 75, 217, 0.9);
+    background-color: rgba(31, 217, 186, 0.9);
     margin-bottom: 5px;
     padding: 40px;
     border-radius: 5px;

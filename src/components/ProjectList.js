@@ -105,8 +105,8 @@ function ProjectList() {
                    <p>Description: {project.description}</p>
                    <p>Status: {project.status}</p>
                    {/* Button to create a bid, displayed only if the project status is not "IN_PROGRESS" */}
-                   {project.status !== 'IN_PROGRESS' && (
-                       <button onClick={() => handleBidButtonClick(project.id)} className="btn-create-bid">Create Bid</button>
+                   {project.status !== 'IN_PROGRESS' &&  project.status !== 'COMPLETED' && (
+                       <button onClick={() => handleBidButtonClick(project.id)} className="btn-create-bid ml-39">Create Bid</button>
                    )}
                    {/* If you want to display additional fields, add them here */}
                </li>

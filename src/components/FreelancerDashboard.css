@@ -1,114 +1,119 @@
+/* FreelancerDashboard.css */
+
 .dashboard {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   font-family: Arial, sans-serif;
 }
 
-.dashboard-sidebar {
-  width: 250px;
-  background-color: #73a7db;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-  border-radius: 0 30px 30px 0;
-  text-align: center;
-}
-
-.dashboard-sidebar h1 {
-  margin-bottom: 20px;
-}
-
-.dashboard-sidebar .user-info {
-  margin-bottom: 20px;
-}
-
-.dashboard-sidebar .logout-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  width: 100%;
-}
-.dashboard-sidebar .logout-btn:hover
-{
-  background-color: #ee041b;
-}
-
-.dashboard-content {
-  flex-grow: 1;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-/* Styling for sidebar links */
-.sidebar-links {
-  margin-top: 20px;
-}
-
-.sidebar-links button {
-  display: block;
-  width: 100%;
-  padding: 10px 0;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #95d658;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.sidebar-links button:hover {
-  background-color: #0056b3;
-}
-/* Sidebar styling */
 .sidebar {
   width: 250px;
-  background-image: linear-gradient(to top, #5fbd58, #473088); /* Gradient background */
+  background-color: #9c2b2b;
   color: white;
-  display: flex;
-  flex-direction: column;
   padding: 20px;
-  box-shadow: 2px 0 5px rgba(240, 89, 89, 0.1);
 }
 
-.sidebar h2 {
-  text-align: center;
+.sidebar h1 {
+  color: #ff8c00;
+  font-size: 24px;
+}
+
+.sidebar .user-info {
   margin-bottom: 20px;
 }
 
 .sidebar ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
-.sidebar li {
+.sidebar ul li {
   margin-bottom: 10px;
 }
 
-.sidebar a {
+.sidebar ul li a {
   color: white;
   text-decoration: none;
-  display: block;
-  padding: 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
 }
 
-.sidebar a:hover {
-  background-color: #495057;
-}
-.btn-logout-btn {
-  background-color: #b33535;
-  color: white;
-  border: none;
-  padding: 15px; /* Increased padding for a larger button */
-  font-size: 16px; /* Increased font size */
-  cursor: pointer;
+.btn-logout {
+  margin-top: 20px;
+  padding: 10px;
   width: 100%;
-  border-radius: 5px; /* Rounded corners */
+  background-color: #ff8c00;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
-.btn-logout-btn:hover {
-  background-color: #fc0d0d; /* Highlight color on hover */
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header .btn-create-project {
+  padding: 10px 20px;
+  background-color: #ff8c00;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.content .section {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.content .section h2 {
+  margin-bottom: 20px;
+}
+
+.progress-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ffbb00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  margin: 0 auto;
+}
+
+.completed-tasks,
+.project-progress {
+  font-size: 24px;
+  text-align: center;
+  background-color: #51c582;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+.calendar ul,
+.task-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.calendar li,
+.task-list li {
+  padding: 10px;
+  background-color: #516be0;
+  color: white;
+  margin-bottom: 10px;
+  border-radius: 4px;
 }

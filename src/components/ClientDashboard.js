@@ -78,12 +78,17 @@ function ClientDashboard() {
     };
 
     const handleShowBids = async (projectId) => {
-        try {
-            const response = await axios.get(`http://localhost:8089/api/bids/project/${projectId}`);
-            setBids(response.data);
-            setSelectedProjectId(projectId);
-        } catch (error) {
-            console.error('Error fetching bids:', error);
+        if (selectedProjectId === projectId) {
+            setSelectedProjectId(null); // Hide bids if already selected
+            setBids([]);
+        } else {
+            try {
+                const response = await axios.get(`http://localhost:8089/api/bids/project/${projectId}`);
+                setBids(response.data);
+                setSelectedProjectId(projectId); // Show bids for the selected project
+            } catch (error) {
+                console.error('Error fetching bids:', error);
+            }
         }
     };
 
@@ -106,13 +111,20 @@ function ClientDashboard() {
 
     const handleRemoveProject = async (projectId) => {
         try {
+            // Call the endpoint to delete bids related to the project
+            await axios.delete(`http://localhost:8089/api/bids/project/${projectId}`);
+            
+            // Call the endpoint to delete the project itself
             await axios.delete(`http://localhost:8089/api/projects/${projectId}`);
+            
+            // Update the state to remove the deleted project
             const updatedProjects = projects.filter(project => project.id !== projectId);
             setProjects(updatedProjects);
         } catch (error) {
             console.error('Error removing project:', error);
         }
     };
+    
 
     const handleLogout = () => {
         localStorage.clear();
@@ -121,7 +133,7 @@ function ClientDashboard() {
 
     return (
         <div className="client-dashboard">
-            <div className="sidebar">
+            <div className="client-dashboard-sidebar">
                 <h1>Client Dashboard</h1>
                 <p className="user-email"><strong>Client Email:</strong> {email}</p>
                 <h2>Navigation</h2>
@@ -136,7 +148,7 @@ function ClientDashboard() {
                 <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
             </div>
             <div className="main-content">
-                <button onClick={() => setShowCreateProjectForm(!showCreateProjectForm)}>
+                <button onClick={() => setShowCreateProjectForm(!showCreateProjectForm)} className="btn-toggle-form">
                     {showCreateProjectForm ? "Hide Create Project Form" : "Show Create Project Form"}
                 </button>
                 {showCreateProjectForm && (
@@ -153,7 +165,7 @@ function ClientDashboard() {
                                 <option value="IN_PROGRESS">In Progress</option>
                                 <option value="COMPLETED">Completed</option>
                             </select>
-                            <button type="submit">Create Project</button>
+                            <button type="submit" className="btn-submit-project">Create Project</button>
                         </form>
                     </div>
                 )}
@@ -166,7 +178,9 @@ function ClientDashboard() {
                                     <strong>{project.title}</strong> - Status: {project.status}
                                 </span>
                                 <div>
-                                    <button onClick={() => handleShowBids(project.id)} className="btn-show-bids">Show Bids</button>
+                                    <button onClick={() => handleShowBids(project.id)} className="btn-show-bids">
+                                        {selectedProjectId === project.id ? 'Hide Bids' : 'Show Bids'}
+                                    </button>
                                     <button onClick={() => handleRemoveProject(project.id)} className="btn-remove-project" style={{ marginLeft: '10px' }}>Remove Project</button>
                                 </div>
                             </div>

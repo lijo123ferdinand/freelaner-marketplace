@@ -7,6 +7,9 @@ import ProjectList from './components/ProjectList';
 import ClientDashboard from './components/ClientDashboard';
 import FreelancerProject from './components/FreelancerProject';
 import FreelancerBids from './components/FreelancerBids';
+import Settings from './components/Settings';
+import Profile from './components/Profile';
+import Report from './components/Report';
 
 const App = () => {
   return (
@@ -25,7 +28,9 @@ const App = () => {
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/FreelancerProject" element={<FreelancerProject />} />
           <Route path="/FreelancerBids" element={<FreelancerBids />} />
-
+          <Route path="/settings" element={<Settings />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/report" element={<Report />} />
 
 
 
