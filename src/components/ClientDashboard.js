@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
+import { Bar, Pie } from 'react-chartjs-2';
+import 'chart.js/auto';
 import './ClientDashboard.css';
 
 function ClientDashboard() {
@@ -79,13 +81,13 @@ function ClientDashboard() {
 
     const handleShowBids = async (projectId) => {
         if (selectedProjectId === projectId) {
-            setSelectedProjectId(null); // Hide bids if already selected
+            setSelectedProjectId(null);
             setBids([]);
         } else {
             try {
                 const response = await axios.get(`http://localhost:8089/api/bids/project/${projectId}`);
                 setBids(response.data);
-                setSelectedProjectId(projectId); // Show bids for the selected project
+                setSelectedProjectId(projectId);
             } catch (error) {
                 console.error('Error fetching bids:', error);
             }
@@ -111,24 +113,44 @@ function ClientDashboard() {
 
     const handleRemoveProject = async (projectId) => {
         try {
-            // Call the endpoint to delete bids related to the project
             await axios.delete(`http://localhost:8089/api/bids/project/${projectId}`);
-            
-            // Call the endpoint to delete the project itself
             await axios.delete(`http://localhost:8089/api/projects/${projectId}`);
-            
-            // Update the state to remove the deleted project
             const updatedProjects = projects.filter(project => project.id !== projectId);
             setProjects(updatedProjects);
         } catch (error) {
             console.error('Error removing project:', error);
         }
     };
-    
 
     const handleLogout = () => {
         localStorage.clear();
         navigate('/login');
+    };
+
+    const projectStatusData = {
+        labels: ['Open', 'In Progress', 'Completed'],
+        datasets: [
+            {
+                label: 'Project Status',
+                data: [
+                    projects.filter(project => project.status === 'OPEN').length,
+                    projects.filter(project => project.status === 'IN_PROGRESS').length,
+                    projects.filter(project => project.status === 'COMPLETED').length
+                ],
+                backgroundColor: ['#007bff', '#ffc107', '#28a745'],
+            },
+        ],
+    };
+
+    const bidsPerProjectData = {
+        labels: projects.map(project => project.title),
+        datasets: [
+            {
+                label: 'Bids per Project',
+                data: projects.map(project => bids.filter(bid => bid.project.id === project.id).length),
+                backgroundColor: '#007bff',
+            },
+        ],
     };
 
     return (
@@ -139,10 +161,11 @@ function ClientDashboard() {
                 <h2>Navigation</h2>
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="/projlist">Projects</a></li>
                     <li><a href="#bids">Bids</a></li>
-                    <li><a href="#profile">Profile</a></li>
-                    <li><a href="#settings">Settings</a></li>
+                    <li><Link to="/profile">Profile</Link></li>
+                    <li><Link to="/settings">Settings</Link></li>
+                    <li><Link to="/report">Report</Link></li>
                 </ul>
                 <h2>Client Dashboard</h2>
                 <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
@@ -170,6 +193,9 @@ function ClientDashboard() {
                     </div>
                 )}
                 <h3>Projects</h3>
+                <Bar data={projectStatusData} />
+                {/* <h3>Bids per Project</h3>
+                <Pie data={bidsPerProjectData} /> */}
                 <ul className="projects-list">
                     {projects.map(project => (
                         <li key={project.id} className="project-item">

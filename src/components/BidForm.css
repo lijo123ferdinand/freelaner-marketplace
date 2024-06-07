@@ -37,6 +37,8 @@
     color: white;
     font-size: 16px;
     cursor: pointer;
+    margin-top: 1em; /* Add some space above the buttons */
+
 }
 
 .bid-form-container button:hover {

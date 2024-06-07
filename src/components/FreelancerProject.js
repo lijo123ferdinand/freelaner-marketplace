@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
 import './FreelancerProject.css';
 
@@ -72,8 +72,8 @@ function FreelancerProject() {
                     <li><a href="/freelancer">Home</a></li>
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="/FreelancerBids">My Bids</a></li>
-                    <li><a href="#profile">Profile</a></li>
-                    <li><a href="#settings">Settings</a></li>
+                    <li><Link to="/profile">Profile</Link></li>
+                    <li><Link to="/settings">Settings</Link></li>
                 </ul>
                 <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
             </div>

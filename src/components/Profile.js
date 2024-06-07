@@ -26,7 +26,7 @@ function Profile() {
             <h1>Profile</h1>
             <p>Hi {name}.</p>
             <div className="profile-image-container">
-                <img src="./icons8-administrator-male-48.png" alt="Profile" className="profile-image" />
+                <img src="./flat-lay-workstation-with-cup-tea-copy-space.jpg" alt="lijo" className="profile-image" />
             </div>
             <ul>
                 <li>Name: {name}</li>
