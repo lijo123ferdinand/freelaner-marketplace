@@ -1,0 +1,78 @@
+/* src/App.css */
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+}
+
+.sidebar h2 {
+  margin: 0 0 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metrics {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.metric {
+  background-color: #ecf0f1;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.chart {
+  background-color: #ecf0f1;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.employee-region {
+  background-color: #ecf0f1;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.employee-region h3 {
+  margin: 0 0 20px;
+}

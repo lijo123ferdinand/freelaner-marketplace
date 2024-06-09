@@ -1,0 +1,188 @@
+/* src/components/ActiveProjects.css */
+
+.active-projects-container {
+    margin: 20px;
+  }
+  
+  .project-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .project-item {
+    margin-bottom: 10px;
+  }
+  
+  .view-details-btn {
+    margin-left: 10px;
+  }
+  
+  .container {
+    max-width: 1200px;
+  }
+  
+  .project-graph {
+    margin-top: 20px;
+  }
+  
+  button {
+    margin-right: 10px; /* Add spacing between buttons */
+  }
+  
+  /* src/components/ClientDashboard.css */
+  
+  .client-dashboard {
+    display: flex;
+  }
+  
+  .client-dashboard-sidebar {
+    flex: 0 0 20%;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .client-dashboard-sidebar h1 {
+    margin-bottom: 20px;
+  }
+  
+  .client-dashboard-sidebar h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .client-dashboard-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .client-dashboard-sidebar ul li {
+    margin-bottom: 10px;
+  }
+  
+  .client-dashboard-sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .client-dashboard-sidebar .btn-logout-btn {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .btn-toggle-form {
+    margin-bottom: 20px;
+  }
+  
+  .create-project-form {
+    margin-bottom: 20px;
+  }
+  
+  .create-project-form input,
+  .create-project-form textarea,
+  .create-project-form select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .projects-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .project-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .bids-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+  
+  .bid-item {
+    margin-bottom: 10px;
+  }
+  
+  .no-bids {
+    color: #777;
+  }
+  
+  .btn-show-bids,
+  .btn-remove-project {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-show-bids:hover,
+  .btn-remove-project:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+  }
+  /* src/components/ActiveProjects.css */
+
+.active-projects-container {
+    display: flex;
+    margin: 20px;
+  }
+  
+  .sidebar {
+    flex: 0 0 20%;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .sidebar h1, .sidebar h2 {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    margin-bottom: 10px;
+  }
+  
+  .sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .sidebar .btn-logout-btn {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  button {
+    margin-right: 10px; /* Add spacing between buttons */
+  }
+  

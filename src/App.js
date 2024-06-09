@@ -10,6 +10,8 @@ import FreelancerBids from './components/FreelancerBids';
 import Settings from './components/Settings';
 import Profile from './components/Profile';
 import Report from './components/Report';
+import Dashboard from './demo/Dashboard';
+import ActiveProjects from './components/ActiveProjects';
 
 const App = () => {
   return (
@@ -31,6 +33,9 @@ const App = () => {
           <Route path="/settings" element={<Settings />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/report" element={<Report />} />
+                <Route path="/dashboard" element={<Dashboard />}/>
+                <Route path="/active-projects" element={<ActiveProjects />}/>
+
 
 
 

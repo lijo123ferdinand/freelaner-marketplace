@@ -161,7 +161,7 @@ function ClientDashboard() {
                 <h2>Navigation</h2>
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="/projlist">Projects</a></li>
+                    <li><a href="active-projects">activeprojects</a></li>
                     <li><a href="#bids">Bids</a></li>
                     <li><Link to="/profile">Profile</Link></li>
                     <li><Link to="/settings">Settings</Link></li>

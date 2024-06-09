@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'; // Fix the import statement
-import './FreelancerBids.css'; // Import the CSS file
+import { jwtDecode } from 'jwt-decode';
+import './FreelancerBids.css';
 
 function FreelancerBids() {
     const [bids, setBids] = useState([]);
@@ -36,6 +36,16 @@ function FreelancerBids() {
         navigate('/login');
     };
 
+    const handleDeleteBid = async (bidId) => {
+        try {
+            await axios.delete(`http://localhost:8089/api/bids/del/${bidId}`);
+            // Remove the deleted bid from the bids list
+            setBids(bids.filter(bid => bid.id !== bidId));
+        } catch (error) {
+            console.error('Error deleting bid:', error);
+        }
+    };
+
     return (
         <div className="freelancer-bids">
             <div className="sidebar">
@@ -46,8 +56,8 @@ function FreelancerBids() {
                     <li><a href="/freelancer">Home</a></li>
                     <li><a href="/FreelancerProject" >Projects</a></li>
                     <li><a href="/FreelancerBids" >My Bids</a></li>
-                     <li><a href="#profile">Profile</a></li>
-                    <li><a href="#settings">Settings</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/settings">Settings</a></li>
                 </ul>
                 <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
             </div>
@@ -60,6 +70,7 @@ function FreelancerBids() {
                                 <span>
                                     <strong>Project:</strong> {bid.project.title} - <strong>Amount:</strong> {bid.amount} - <strong>Proposal:</strong> {bid.proposal}
                                 </span>
+                                <button onClick={() => handleDeleteBid(bid.id)} className="btn-delete">Delete</button>
                             </div>
                         </li>
                     ))}
