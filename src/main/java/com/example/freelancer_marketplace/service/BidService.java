@@ -41,4 +41,5 @@ public class BidService {
         List<Bid> projectBids = bidRepository.findByProjectId(projectId);
         bidRepository.deleteAll(projectBids);
     }
+    
 }

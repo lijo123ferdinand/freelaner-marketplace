@@ -6,6 +6,7 @@ import com.example.freelancer_marketplace.repos.BidRepository;
 import com.example.freelancer_marketplace.repos.ProjectRepository;
 import com.example.freelancer_marketplace.service.BidService;
 import com.example.freelancer_marketplace.service.ProjectService;
+import com.example.freelancer_marketplace.service.TaskService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -30,6 +31,10 @@ public class BidController {
     private ProjectService projectService;
      @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private TaskService taskService;
+
 
     @Autowired
     private BidRepository bidRepository; // Assuming you have a BidRepository
@@ -125,34 +130,54 @@ public class BidController {
         }
     }
     
+    @DeleteMapping("/del/{bidId}")
+    public ResponseEntity<?> deleteBidById(@PathVariable Long bidId) {
+        try {
+            // Check if the bid exists
+            Optional<Bid> existingBid = bidService.getBidById(bidId);
+            if (existingBid.isPresent()) {
+                // Delete the bid
+                bidService.deleteBid(bidId);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the bid.");
+        }
+    }
+    
 
 
     @DeleteMapping("/{projectId}")
-@Transactional
-public ResponseEntity<?> deleteProjectAndBids(@PathVariable Long projectId) {
-    try {
-        // Find the project by ID
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
+    @Transactional
+    public ResponseEntity<?> deleteProjectAndBids(@PathVariable Long projectId) {
+        try {
+            // Find the project by ID
+            Project project = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
 
-        // Find all bids associated with the project
-        List<Bid> bids = bidRepository.findByProjectId(projectId);
+            // Delete tasks associated with the project
+            taskService.deleteTasksByProjectId(projectId);
 
-        // Delete each bid associated with the project
-        for (Bid bid : bids) {
-            bidRepository.delete(bid);
+            // Find all bids associated with the project
+            List<Bid> bids = bidRepository.findByProjectId(projectId);
+
+            // Delete each bid associated with the project
+            for (Bid bid : bids) {
+                bidRepository.delete(bid);
+            }
+
+            // Finally, delete the project
+            projectRepository.delete(project);
+
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the project and its bids.");
         }
-
-        // Finally, delete the project
-        projectRepository.delete(project);
-
-        return ResponseEntity.ok().build();
-    } catch (EntityNotFoundException ex) {
-        return ResponseEntity.notFound().build();
-    } catch (Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the project and its bids.");
     }
-}
 
     // @DeleteMapping("/{projectId}")
     // @Transactional
