@@ -8,7 +8,7 @@
 /* Sidebar styling */
 .client-dashboard-sidebar {
     width: 250px;
-    background-image: linear-gradient(to top, #c7dd76, #2e2002); /* Gradient background */
+    background-image: linear-gradient(to top, #5891c5, #21e95d); /* Gradient background */
     color: white;
     display: flex;
     flex-direction: column;

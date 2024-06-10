@@ -156,18 +156,17 @@ function ClientDashboard() {
     return (
         <div className="client-dashboard">
             <div className="client-dashboard-sidebar">
-                <h1>Client Dashboard</h1>
+                <h1><strong>Client Dashboard</strong></h1>
                 <p className="user-email"><strong>Client Email:</strong> {email}</p>
                 <h2>Navigation</h2>
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="active-projects">activeprojects</a></li>
+                    <li><a href="active-projects">Active projects</a></li>
                     <li><a href="#bids">Bids</a></li>
                     <li><Link to="/profile">Profile</Link></li>
                     <li><Link to="/settings">Settings</Link></li>
                     <li><Link to="/report">Report</Link></li>
                 </ul>
-                <h2>Client Dashboard</h2>
                 <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
             </div>
             <div className="main-content">

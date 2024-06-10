@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import { Line } from 'react-chartjs-2';
+import {jwtDecode} from 'jwt-decode';
+import { Line, Doughnut } from 'react-chartjs-2';
 import './ActiveProjects.css';
+import { Link, useNavigate } from 'react-router-dom';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -19,13 +20,13 @@ const ActiveProjects = () => {
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
   const userId = decodedToken.userId;
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`http://localhost:8089/api/projects/user/${userId}`)
       .then(response => {
         const inProgressProjects = response.data.filter(project => project.status === "IN_PROGRESS");
         setProjects(inProgressProjects);
-        // Fetch completion percentage for the first project in the list
         if (inProgressProjects.length > 0) {
           const firstProject = inProgressProjects[0];
           axios.get(`http://localhost:8089/tasks/project/${firstProject.id}/statusPercentage`)
@@ -77,7 +78,6 @@ const ActiveProjects = () => {
         const updatedTasks = tasks.map(task => task.id === taskId ? response.data : task);
         setTasks(updatedTasks);
         checkAndUpdateProjectStatus(updatedTasks, selectedProject.id);
-        // Calculate the new project completion percentage
         const completedTasks = updatedTasks.filter(task => task.status === 'COMPLETED');
         const newCompletionPercentage = (completedTasks.length / updatedTasks.length) * 100;
         setProjectCompletionPercentage(newCompletionPercentage);
@@ -114,7 +114,11 @@ const ActiveProjects = () => {
     ],
   };
 
-  // Prepare data for the project completion doughnut chart
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+
   const projectCompletionChartData = {
     labels: ['Completed', 'Remaining'],
     datasets: [
@@ -126,53 +130,61 @@ const ActiveProjects = () => {
       },
     ],
   };
+
   return (
-    <div className="container active-projects-container">
-      <div className="sidebar">
-        <h1>Client Dashboard</h1>
-        <h2>Projects</h2>
+    <div className="client-dashboard">
+      <div className="client-dashboard-sidebar">
+        <h2>Active Projects</h2>
         <ul>
-          {projects.map(project => (
-            <li key={project.id}>
-              <a href="#" onClick={() => handleProjectDetailsClick(project)}>{project.title}</a>
-            </li>
-          ))}
+          <li><a href="/client-dashboard">Home</a></li>
+          <li><a href="active-projects">Active projects</a></li>
+          <li><Link to="/profile">Profile</Link></li>
+          <li><Link to="/settings">Settings</Link></li>
+          <li><Link to="/report">Report</Link></li>
         </ul>
-        <button className="btn btn-danger btn-logout-btn">Logout</button>
+        <button onClick={handleLogout} className="btn-logout-btn">Logout</button>
       </div>
       <div className="main-content">
-        <h1 className="mt-5">Active Projects</h1>
         <div className="row">
           <div className="col">
-            <h2>Projects</h2>
-            <ul className="project-list">
-              {projects.map(project => (
-                <li key={project.id} className="project-item">
-                  {project.title} - {project.status}
-                  <button className="btn btn-primary btn-sm view-details-btn" onClick={() => handleProjectDetailsClick(project)}>View Details</button>
-                </li>
-              ))}
-            </ul>
+            <h2 style={{ textAlign: 'left' }}>Projects</h2>
+            {projects.length === 0 ? (
+              <p>No active projects</p>
+            ) : (
+              <ul className="project-list">
+                {projects.map(project => (
+  <li key={project.id} className="project-item">
+    <div className="project-details">
+      <span>{project.title} - {project.status}</span>
+      <button className="btn btn-primary btn-sm view-details-btn" onClick={() => handleProjectDetailsClick(project)}>View Details</button>
+    </div>
+  </li>
+))}
+
+              </ul>
+            )}
           </div>
           <div className="col">
             {selectedProject && (
               <div>
-                <h2>Tasks for Project {selectedProject.title}</h2>
+                <h2><strong>Tasks for Project :</strong> {selectedProject.title}</h2>
                 <ul className="project-list">
-                  {tasks.map(task => (
-                    <li key={task.id} className="project-item">
-                      {task.name} - {task.status}
-                      <button onClick={() => handleUpdateTaskStatus(task.id, 'COMPLETED')} className="btn btn-success btn-sm">Mark as Completed</button>
-                    </li>
-                  ))}
+                  
+                {tasks.map(task => (
+  <li key={task.id} className="project-item">
+    <div className="task-details">
+      <span>{task.name} - {task.status}</span>
+      <button onClick={() => handleUpdateTaskStatus(task.id, 'COMPLETED')} className="btn btn-success btn-sm">Mark as Completed</button>
+    </div>
+  </li>
+))}
+
                 </ul>
                 <h3>Create New Tasks</h3>
                 {newTasks.map((task, index) => (
                   <div key={index} className="mb-3">
                     <input
                       type="text"
-                     
-
                       placeholder="Task Name"
                       value={task.name}
                       onChange={e => handleNewTaskChange(index, 'name', e.target.value)}
@@ -187,18 +199,18 @@ const ActiveProjects = () => {
                     />
                   </div>
                 ))}
-                <button onClick={handleAddTaskField} className="btn btn-primary mb-3">Add Another Task</button>
-                <button onClick={handleCreateTasks} className="btn btn-success mb-3 ml-2">Create Tasks</button>
+                <button onClick={handleAddTaskField} style={{ marginRight: '10px' }} className="btn btn-primary mb-3">Add Another Task</button>
+                <button onClick={handleCreateTasks} className="btn btn-success mb-3">Create Tasks</button>
               </div>
             )}
           </div>
         </div>
         <div className="row mt-5">
           <div className="col">
-          <h2>Project Completion</h2>
-          <div className="project-graph">
-            <Doughnut data={projectCompletionChartData} />
-          </div>
+            <h2 style={{ textAlign: 'left' }}>Project Status</h2>
+            <div className="project-graph">
+              <Doughnut data={projectCompletionChartData} />
+            </div>
           </div>
         </div>
       </div>

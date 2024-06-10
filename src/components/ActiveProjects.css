@@ -1,8 +1,9 @@
 /* src/components/ActiveProjects.css */
 
 .active-projects-container {
-    margin: 20px;
-  }
+  display: flex;
+  font-family: Arial, sans-serif;
+  height: 100vh; /* Full viewport height */  }
   
   .project-list {
     list-style-type: none;
@@ -22,9 +23,11 @@
   }
   
   .project-graph {
-    margin-top: 20px;
-  }
-  
+    margin-top: 5px;
+    width: 60%; /* Adjust the percentage as needed */
+    height: 300px; /* Adjust the pixel value as needed */
+}
+
   button {
     margin-right: 10px; /* Add spacing between buttons */
   }
@@ -44,6 +47,16 @@
   .client-dashboard-sidebar h1 {
     margin-bottom: 20px;
   }
+  .task-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .task-details button {
+    margin-left: 10px; /* Adjust margin as needed */
+  }
+  
   
   .client-dashboard-sidebar h2 {
     margin-top: 20px;
@@ -130,7 +143,7 @@
   }
   
   .btn-success {
-    background-color: #28a745;
+    background-color: #1fa1dd;
     color: #fff;
     border: none;
     padding: 5px 10px;
@@ -177,12 +190,19 @@
     margin-top: 20px;
   }
   
-  .main-content {
-    flex: 1;
-    padding: 20px;
-  }
   
-  button {
-    margin-right: 10px; /* Add spacing between buttons */
-  }
-  
+/* Button styling */
+.main-content button {
+  background-color: #14bcda;
+  color: rgb(8, 7, 7);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.main-content button:hover {
+  background-color: #0056b3;
+}
