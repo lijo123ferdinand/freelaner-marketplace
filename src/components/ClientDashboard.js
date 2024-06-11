@@ -216,7 +216,7 @@ function ClientDashboard() {
                                             <li key={bid.id} className="bid-item">
                                                 <span><strong>{bid.user.name}</strong> ({bid.user.email}) - {bid.amount} - {bid.proposal}</span>
                                                 {project.status !== 'IN_PROGRESS' && (
-                                                    <button onClick={() => handleAcceptBid(project.id, bid.id)} className="btn btn-success ml-2">Accept Bid</button>
+                                                    <button onClick={() => handleAcceptBid(project.id, bid.id)} style={{ marginLeft: '30rem' }} className="btn btn-success">Accept Bid</button>
                                                 )}
                                             </li>
                                         ))
